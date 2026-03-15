@@ -1,0 +1,15 @@
+{
+  "name": "@chainstream/a2ui-components",
+  "version": "0.0.1",
+  "private": true,
+  "description": "A2UI Crypto Catalog and renderers for ChainStream",
+  "license": "MIT",
+  "scripts": {
+    "build": "pnpm -r build",
+    "lint": "pnpm -r lint",
+    "test": "pnpm -r test",
+    "storybook": "storybook dev -p 6006",
+    "build-storybook": "storybook build"
+  },
+  "packageManager": "pnpm@10.9.0"
+}

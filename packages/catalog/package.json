@@ -1,0 +1,21 @@
+{
+  "name": "@chainstream/a2ui-catalog",
+  "version": "0.0.1",
+  "description": "A2UI Crypto Catalog JSON Schema definitions",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "dependencies": {
+    "ajv": "^8.17.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

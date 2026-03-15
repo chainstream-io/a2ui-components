@@ -1,0 +1,22 @@
+{
+  "name": "@chainstream/a2ui-image-renderer",
+  "version": "0.0.1",
+  "description": "Server-side image renderer for A2UI components (Puppeteer)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@chainstream/a2ui-catalog": "workspace:*",
+    "puppeteer": "^24.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
