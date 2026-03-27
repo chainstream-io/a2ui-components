@@ -1,5 +1,5 @@
 {
-  "name": "@chainstream/a2ui-image-renderer",
+  "name": "@chainstream-io/a2ui-image-renderer",
   "version": "0.0.1",
   "description": "Server-side image renderer for A2UI components (Puppeteer)",
   "main": "dist/index.js",
@@ -10,7 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@chainstream/a2ui-catalog": "workspace:*",
+    "@chainstream-io/a2ui-catalog": "workspace:*",
     "puppeteer": "^24.0.0"
   },
   "devDependencies": {

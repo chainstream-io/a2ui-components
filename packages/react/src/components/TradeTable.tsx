@@ -1,4 +1,6 @@
 import React from 'react';
+import { cn } from '@/lib/utils';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/ui/table';
 
 export interface Trade {
   id: string;
@@ -12,33 +14,50 @@ export interface Trade {
 export interface TradeTableProps {
   trades: Trade[];
   maxRows?: number;
+  className?: string;
 }
 
-export const TradeTable: React.FC<TradeTableProps> = ({ trades, maxRows = 50 }) => {
+export const TradeTable: React.FC<TradeTableProps> = ({ trades, maxRows = 50, className }) => {
+  const visible = trades.slice(0, maxRows);
+
+  if (visible.length === 0) {
+    return (
+      <div className={cn('flex h-32 items-center justify-center rounded-lg border border-dashed text-sm text-muted-foreground', className)} data-component="TradeTable">
+        No trades yet
+      </div>
+    );
+  }
+
   return (
-    <div data-component="TradeTable">
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead>
-          <tr>
-            <th>Time</th>
-            <th>Side</th>
-            <th>Price</th>
-            <th>Amount</th>
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {trades.slice(0, maxRows).map((trade) => (
-            <tr key={trade.id}>
-              <td>{new Date(trade.time).toLocaleTimeString()}</td>
-              <td style={{ color: trade.side === 'buy' ? '#4caf50' : '#f44336' }}>{trade.side}</td>
-              <td>{trade.price}</td>
-              <td>{trade.amount}</td>
-              <td>{trade.total}</td>
-            </tr>
+    <div className={className} data-component="TradeTable">
+      <Table>
+        <TableHeader>
+          <TableRow className="hover:bg-transparent">
+            <TableHead className="w-[120px]">Time</TableHead>
+            <TableHead className="w-[60px]">Side</TableHead>
+            <TableHead className="text-right">Price</TableHead>
+            <TableHead className="text-right">Amount</TableHead>
+            <TableHead className="text-right">Total</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {visible.map((trade) => (
+            <TableRow key={trade.id}>
+              <TableCell className="tabular-nums text-muted-foreground">
+                {new Date(trade.time).toLocaleTimeString()}
+              </TableCell>
+              <TableCell>
+                <span className={cn('text-xs font-semibold uppercase', trade.side === 'buy' ? 'text-profit' : 'text-loss')}>
+                  {trade.side}
+                </span>
+              </TableCell>
+              <TableCell className="text-right tabular-nums">{trade.price.toLocaleString()}</TableCell>
+              <TableCell className="text-right tabular-nums">{trade.amount.toLocaleString()}</TableCell>
+              <TableCell className="text-right tabular-nums font-medium">{trade.total.toLocaleString()}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 };
