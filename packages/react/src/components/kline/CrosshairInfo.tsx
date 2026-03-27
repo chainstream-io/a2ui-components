@@ -21,7 +21,16 @@ function formatNum(n: number, decimals = 2): string {
   if (n >= 1e9) return `${(n / 1e9).toFixed(2)}B`;
   if (n >= 1e6) return `${(n / 1e6).toFixed(2)}M`;
   if (n >= 1e3) return `${(n / 1e3).toFixed(1)}K`;
-  if (n < 0.0001 && n > 0) return n.toExponential(2);
+  if (n < 0.0001 && n > 0) {
+    const s = n.toFixed(20).replace(/0+$/, '');
+    const match = s.match(/^0\.(0*)/);
+    if (match && match[1].length >= 4) {
+      const zeros = match[1].length;
+      const sig = s.slice(2 + zeros, 2 + zeros + 4);
+      return `0.0{${zeros}}${sig}`;
+    }
+    return n.toPrecision(4);
+  }
   return n.toFixed(decimals);
 }
 

@@ -20,8 +20,19 @@ function formatCompact(n: number): string {
   return `$${n.toLocaleString()}`;
 }
 
+function formatSmallPrice(price: number): string {
+  const s = price.toFixed(20).replace(/0+$/, '');
+  const match = s.match(/^0\.(0*)/);
+  if (!match) return `$${price.toPrecision(4)}`;
+  const leadingZeros = match[1].length;
+  const significand = s.slice(2 + leadingZeros, 2 + leadingZeros + 4);
+  if (leadingZeros >= 4) return `$0.0{${leadingZeros}}${significand}`;
+  return `$${s.slice(0, 2 + leadingZeros + 4)}`;
+}
+
 function formatPrice(price: number): string {
-  if (price < 0.0001) return `$${price.toExponential(2)}`;
+  if (price === 0) return '$0.00';
+  if (price > 0 && price < 0.0001) return formatSmallPrice(price);
   if (price < 1) return `$${price.toPrecision(4)}`;
   return `$${price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
