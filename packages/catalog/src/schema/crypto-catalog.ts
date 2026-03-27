@@ -9,10 +9,16 @@ export interface CryptoComponent {
 }
 
 export const cryptoCatalog: Record<string, CryptoComponent> = {
-  CandlestickChart: {
-    type: 'CandlestickChart',
-    description: 'OHLCV candlestick chart',
+  KlineChart: {
+    type: 'KlineChart',
+    description: 'Full-featured K-line chart with volume overlay, resolution bar, crosshair info, and real-time updates via WebSocket',
     dataBinding: { path: '/klines', format: 'ohlcv' },
+    props: {
+      showVolume: true,
+      showToolbar: true,
+      showCrosshairInfo: true,
+      autoScroll: true,
+    },
   },
   PriceLineChart: {
     type: 'PriceLineChart',

@@ -1,35 +1,39 @@
 import React from 'react';
+import { cn } from '@/lib/utils';
+import { Badge } from '@/ui/badge';
+import { Info, AlertTriangle, ShieldAlert, CheckCircle } from 'lucide-react';
 
 export interface AlertBadgeProps {
   type: 'info' | 'warning' | 'danger' | 'success';
   message: string;
   timestamp?: number;
+  className?: string;
 }
 
-const colorMap: Record<AlertBadgeProps['type'], string> = {
-  info: '#2196F3',
-  warning: '#ff9800',
-  danger: '#f44336',
-  success: '#4caf50',
-};
+const iconMap = {
+  info: Info,
+  warning: AlertTriangle,
+  danger: ShieldAlert,
+  success: CheckCircle,
+} as const;
 
-export const AlertBadge: React.FC<AlertBadgeProps> = ({ type, message, timestamp }) => {
+const variantMap = {
+  info: 'info',
+  warning: 'warning',
+  danger: 'loss',
+  success: 'profit',
+} as const;
+
+export const AlertBadge: React.FC<AlertBadgeProps> = ({ type, message, timestamp, className }) => {
+  const Icon = iconMap[type];
+
   return (
-    <div
-      data-component="AlertBadge"
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        gap: 8,
-        padding: '4px 12px',
-        borderRadius: 16,
-        backgroundColor: `${colorMap[type]}20`,
-        color: colorMap[type],
-        fontSize: 13,
-      }}
-    >
+    <Badge variant={variantMap[type]} className={cn('gap-1.5 px-3 py-1 text-xs', className)} data-component="AlertBadge">
+      <Icon className="size-3.5" />
       <span>{message}</span>
-      {timestamp && <span style={{ opacity: 0.7 }}>{new Date(timestamp).toLocaleTimeString()}</span>}
-    </div>
+      {timestamp != null && (
+        <span className="opacity-60">{new Date(timestamp).toLocaleTimeString()}</span>
+      )}
+    </Badge>
   );
 };
