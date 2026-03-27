@@ -1,6 +1,6 @@
 {
   "name": "@chainstream-io/a2ui-react",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "React renderer for A2UI Crypto Catalog components",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

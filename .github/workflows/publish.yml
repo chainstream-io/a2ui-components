@@ -20,17 +20,6 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - name: Set version from git tag
-        run: |
-          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
-            VERSION="${GITHUB_REF#refs/tags/v}"
-          else
-            VERSION="0.0.0-dev.$(date +%s)"
-          fi
-          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
-          cd packages/catalog && pnpm version "$VERSION" --no-git-tag-version --allow-same-version
-          cd ../react && pnpm version "$VERSION" --no-git-tag-version --allow-same-version
-
       - run: pnpm build
 
       - name: Publish catalog
