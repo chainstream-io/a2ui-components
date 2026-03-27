@@ -18,6 +18,8 @@ export interface KlineChartProps {
 
   /** SDK-managed mode props (use with useKlineData hook externally) */
   onResolutionChange?: (resolution: string) => void;
+  /** Called when user scrolls to left edge and more historical data is needed */
+  onLoadMore?: (beforeTime: number) => void;
 
   width?: number;
   height?: number;
@@ -34,6 +36,7 @@ export const KlineChart: React.FC<KlineChartProps> = ({
   data = [],
   latestBar,
   onResolutionChange,
+  onLoadMore,
   width = 800,
   height = 500,
   showVolume = true,
@@ -143,6 +146,25 @@ export const KlineChart: React.FC<KlineChartProps> = ({
 
     chartRef.current = chart;
 
+    // Infinite scroll: preload when visible range approaches left boundary
+    let lastLoadedFirst = 0;
+    chart.timeScale().subscribeVisibleLogicalRangeChange(() => {
+      const range = chart.timeScale().getVisibleLogicalRange();
+      if (!range || loadingMoreRef.current) return;
+      const totalBars = dataMapRef.current.size;
+      if (totalBars === 0) return;
+
+      const leftRatio = range.from / totalBars;
+      if (leftRatio < 0.3) {
+        const times = Array.from(dataMapRef.current.keys()).sort((a, b) => a - b);
+        if (times[0] === lastLoadedFirst) return;
+        lastLoadedFirst = times[0];
+        loadingMoreRef.current = true;
+        loadMoreRef.current?.(times[0]);
+        setTimeout(() => { loadingMoreRef.current = false; }, 300);
+      }
+    });
+
     return () => {
       chart.remove();
       chartRef.current = null;
@@ -150,6 +172,11 @@ export const KlineChart: React.FC<KlineChartProps> = ({
       volumeSeriesRef.current = null;
     };
   }, [width, chartHeight, showVolume]);
+
+  // Scroll-to-load-more: detect left edge
+  const loadMoreRef = useRef(onLoadMore);
+  loadMoreRef.current = onLoadMore;
+  const loadingMoreRef = useRef(false);
 
   // Set full data
   useEffect(() => {
@@ -162,6 +189,7 @@ export const KlineChart: React.FC<KlineChartProps> = ({
     const sorted = [...data].sort((a, b) => a.time - b.time);
 
     for (const bar of sorted) {
+      if (map.has(bar.time)) continue;
       map.set(bar.time, bar);
       candleData.push({
         time: bar.time as Time,
