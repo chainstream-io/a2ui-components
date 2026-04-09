@@ -29,7 +29,8 @@ function LiveSearch() {
   if (error) return <div className="text-loss text-sm p-4">Error: {error.message}</div>;
   if (isLoading) return <div className="text-muted-foreground text-sm p-4">Searching tokens...</div>;
 
-  return <TokenListTable tokens={data} />;
+  const tokens = data.map((t) => ({ ...t, change24h: t.priceChange24h }));
+  return <TokenListTable tokens={tokens} />;
 }
 
 export const SolanaTrending: StoryObj = {
