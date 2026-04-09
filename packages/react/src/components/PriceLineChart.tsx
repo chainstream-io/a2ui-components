@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { createChart, ColorType, type IChartApi } from 'lightweight-charts';
+import React, { useEffect, useRef, useCallback } from 'react';
+import { createChart, ColorType, type IChartApi, type ISeriesApi } from 'lightweight-charts';
 import { THEME } from '@/lib/chart-colors';
 
 export interface PriceLineChartProps {
@@ -17,9 +17,15 @@ export const PriceLineChart: React.FC<PriceLineChartProps> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
+  const seriesRef = useRef<ISeriesApi<'Line'> | null>(null);
 
-  useEffect(() => {
+  const initChart = useCallback(() => {
     if (!containerRef.current) return;
+    if (chartRef.current) {
+      chartRef.current.remove();
+      chartRef.current = null;
+      seriesRef.current = null;
+    }
 
     const chart = createChart(containerRef.current, {
       width,
@@ -43,15 +49,32 @@ export const PriceLineChart: React.FC<PriceLineChartProps> = ({
       crosshairMarkerRadius: 4,
     });
 
-    series.setData(data.map((d) => ({ time: d.time as any, value: d.value })));
-    chart.timeScale().fitContent();
     chartRef.current = chart;
+    seriesRef.current = series;
+  }, [width, height, color]);
 
+  useEffect(() => {
+    initChart();
     return () => {
-      chart.remove();
-      chartRef.current = null;
+      if (chartRef.current) {
+        chartRef.current.remove();
+        chartRef.current = null;
+        seriesRef.current = null;
+      }
     };
-  }, [data, width, height, color]);
+  }, [initChart]);
+
+  useEffect(() => {
+    if (!seriesRef.current || !chartRef.current) return;
+    seriesRef.current.setData(data.map((d) => ({ time: d.time as any, value: d.value })));
+    chartRef.current.timeScale().fitContent();
+  }, [data]);
+
+  useEffect(() => {
+    if (chartRef.current) {
+      chartRef.current.applyOptions({ width, height });
+    }
+  }, [width, height]);
 
   return <div ref={containerRef} data-component="PriceLineChart" />;
 };

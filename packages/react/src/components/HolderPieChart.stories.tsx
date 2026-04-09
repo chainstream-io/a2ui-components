@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { HolderPieChart } from './HolderPieChart';
 
 const meta: Meta<typeof HolderPieChart> = {
-  title: 'Charts/HolderPieChart',
+  title: 'Mock/HolderPieChart',
   component: HolderPieChart,
   parameters: { layout: 'centered' },
 };

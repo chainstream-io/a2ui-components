@@ -12,12 +12,17 @@ export const HolderPieChart: React.FC<HolderPieChartProps> = ({ data, width = 40
   const cy = height / 2;
   const radius = Math.min(cx, cy) - 40;
 
+  const totalPct = data.reduce((sum, d) => sum + d.percentage, 0);
+  const entries = totalPct < 99.5
+    ? [...data, { address: 'others', percentage: 100 - totalPct, label: 'Others' }]
+    : data;
+
   let cumulative = 0;
-  const slices = data.map((d, i) => {
+  const slices = entries.map((d, i) => {
     const startAngle = cumulative * 3.6 * (Math.PI / 180);
     cumulative += d.percentage;
     const endAngle = cumulative * 3.6 * (Math.PI / 180);
-    const largeArc = d.percentage > 50 / 3.6 ? 1 : 0;
+    const largeArc = d.percentage > 50 ? 1 : 0;
 
     const x1 = cx + radius * Math.cos(startAngle - Math.PI / 2);
     const y1 = cy + radius * Math.sin(startAngle - Math.PI / 2);
@@ -29,9 +34,11 @@ export const HolderPieChart: React.FC<HolderPieChartProps> = ({ data, width = 40
     const lx = cx + labelR * Math.cos(midAngle);
     const ly = cy + labelR * Math.sin(midAngle);
 
+    const isOthers = d.address === 'others';
+
     return {
       path: `M ${cx} ${cy} L ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2} Z`,
-      color: CHART_COLORS[i % CHART_COLORS.length],
+      color: isOthers ? THEME.border : CHART_COLORS[i % CHART_COLORS.length],
       label: d.label ?? d.address.slice(0, 6),
       pct: d.percentage,
       lx,

@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "ES2021",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./packages/react/src/*"],
+      "@sb/*": ["./.storybook/*"]
+    }
+  },
+  "include": [
+    "packages/react/src/**/*",
+    ".storybook/**/*"
+  ]
+}

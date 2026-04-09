@@ -3,7 +3,7 @@ import { PriceLineChart } from './PriceLineChart';
 import { THEME } from '@/lib/chart-colors';
 
 const meta: Meta<typeof PriceLineChart> = {
-  title: 'Charts/PriceLineChart',
+  title: 'Mock/PriceLineChart',
   component: PriceLineChart,
   parameters: { layout: 'centered' },
 };

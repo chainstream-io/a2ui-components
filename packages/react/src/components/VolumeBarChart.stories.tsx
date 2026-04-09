@@ -3,7 +3,7 @@ import { VolumeBarChart } from './VolumeBarChart';
 import { THEME } from '@/lib/chart-colors';
 
 const meta: Meta<typeof VolumeBarChart> = {
-  title: 'Charts/VolumeBarChart',
+  title: 'Mock/VolumeBarChart',
   component: VolumeBarChart,
   parameters: { layout: 'centered' },
 };

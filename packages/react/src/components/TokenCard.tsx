@@ -37,8 +37,9 @@ function formatPrice(price: number): string {
   return `$${price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
 }
 
-export const TokenCard: React.FC<TokenCardProps> = ({ name, symbol, price, change24h, marketCap, logoUrl, className }) => {
-  const isPositive = change24h >= 0;
+export const TokenCard: React.FC<TokenCardProps> = ({ name, symbol, price = 0, change24h = 0, marketCap, logoUrl, className }) => {
+  const safeChange = change24h || 0;
+  const isPositive = safeChange >= 0;
 
   return (
     <Card className={cn('w-[280px] transition-colors hover:border-primary/30', className)} data-component="TokenCard">
@@ -47,7 +48,7 @@ export const TokenCard: React.FC<TokenCardProps> = ({ name, symbol, price, chang
           <img src={logoUrl} alt={symbol} className="size-10 rounded-full bg-muted" />
         ) : (
           <div className="flex size-10 items-center justify-center rounded-full bg-muted text-sm font-bold text-muted-foreground">
-            {symbol.slice(0, 2)}
+            {(symbol ?? '??').slice(0, 2)}
           </div>
         )}
         <div className="flex flex-col">
@@ -57,10 +58,10 @@ export const TokenCard: React.FC<TokenCardProps> = ({ name, symbol, price, chang
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
         <div className="flex items-baseline justify-between">
-          <span className="text-2xl font-bold tabular-nums tracking-tight">{formatPrice(price)}</span>
+          <span className="text-2xl font-bold tabular-nums tracking-tight">{formatPrice(price || 0)}</span>
           <span className={cn('inline-flex items-center gap-1 text-sm font-medium tabular-nums', isPositive ? 'text-profit' : 'text-loss')}>
             {isPositive ? <TrendingUp className="size-3.5" /> : <TrendingDown className="size-3.5" />}
-            {isPositive ? '+' : ''}{change24h.toFixed(2)}%
+            {isPositive ? '+' : ''}{safeChange.toFixed(2)}%
           </span>
         </div>
         {marketCap != null && marketCap > 0 && (

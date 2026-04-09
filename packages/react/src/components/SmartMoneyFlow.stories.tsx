@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { SmartMoneyFlow } from './SmartMoneyFlow';
 
 const meta: Meta<typeof SmartMoneyFlow> = {
-  title: 'Charts/SmartMoneyFlow',
+  title: 'Mock/SmartMoneyFlow',
   component: SmartMoneyFlow,
   parameters: { layout: 'centered' },
 };

@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { AlertBadge } from './AlertBadge';
 
 const meta: Meta<typeof AlertBadge> = {
-  title: 'UI/AlertBadge',
+  title: 'Mock/AlertBadge',
   component: AlertBadge,
   parameters: { layout: 'centered' },
 };

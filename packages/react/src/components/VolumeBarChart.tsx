@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from 'react';
-import { createChart, ColorType, type IChartApi } from 'lightweight-charts';
+import React, { useEffect, useRef, useCallback } from 'react';
+import { createChart, ColorType, type IChartApi, type ISeriesApi } from 'lightweight-charts';
 import { THEME } from '@/lib/chart-colors';
 
 export interface VolumeBarChartProps {
@@ -11,9 +11,15 @@ export interface VolumeBarChartProps {
 export const VolumeBarChart: React.FC<VolumeBarChartProps> = ({ data, width = 600, height = 300 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
+  const seriesRef = useRef<ISeriesApi<'Histogram'> | null>(null);
 
-  useEffect(() => {
+  const initChart = useCallback(() => {
     if (!containerRef.current) return;
+    if (chartRef.current) {
+      chartRef.current.remove();
+      chartRef.current = null;
+      seriesRef.current = null;
+    }
 
     const chart = createChart(containerRef.current, {
       width,
@@ -34,22 +40,38 @@ export const VolumeBarChart: React.FC<VolumeBarChartProps> = ({ data, width = 60
       priceScaleId: '',
     });
 
-    series.setData(
+    chartRef.current = chart;
+    seriesRef.current = series;
+  }, [width, height]);
+
+  useEffect(() => {
+    initChart();
+    return () => {
+      if (chartRef.current) {
+        chartRef.current.remove();
+        chartRef.current = null;
+        seriesRef.current = null;
+      }
+    };
+  }, [initChart]);
+
+  useEffect(() => {
+    if (!seriesRef.current || !chartRef.current) return;
+    seriesRef.current.setData(
       data.map((d) => ({
         time: d.time as any,
         value: d.volume,
         color: d.color ?? `${THEME.info}80`,
       })),
     );
+    chartRef.current.timeScale().fitContent();
+  }, [data]);
 
-    chart.timeScale().fitContent();
-    chartRef.current = chart;
-
-    return () => {
-      chart.remove();
-      chartRef.current = null;
-    };
-  }, [data, width, height]);
+  useEffect(() => {
+    if (chartRef.current) {
+      chartRef.current.applyOptions({ width, height });
+    }
+  }, [width, height]);
 
   return <div ref={containerRef} data-component="VolumeBarChart" />;
 };

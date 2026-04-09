@@ -10,8 +10,9 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@sb/*": ["../../.storybook/*"]
     }
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "../../.storybook/**/*"]
 }

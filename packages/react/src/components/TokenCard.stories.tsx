@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { TokenCard } from './TokenCard';
 
 const meta: Meta<typeof TokenCard> = {
-  title: 'UI/TokenCard',
+  title: 'Mock/TokenCard',
   component: TokenCard,
   parameters: { layout: 'centered' },
 };

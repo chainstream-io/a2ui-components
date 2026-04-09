@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { KlineChart, type KlineBar } from './KlineChart';
 
 const meta: Meta<typeof KlineChart> = {
-  title: 'Charts/KlineChart',
+  title: 'Mock/KlineChart',
   component: KlineChart,
   parameters: { layout: 'centered' },
 };

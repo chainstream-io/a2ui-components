@@ -50,11 +50,6 @@ export const cryptoCatalog: Record<string, CryptoComponent> = {
     description: 'Real-time trade detail table with live append',
     dataBinding: { path: '/trades' },
   },
-  WalletDashboard: {
-    type: 'WalletDashboard',
-    description: 'Wallet overview layout composing sub-components',
-    dataBinding: { path: '/' },
-  },
   AlertBadge: {
     type: 'AlertBadge',
     description: 'Risk/signal alert badge',
@@ -64,5 +59,30 @@ export const cryptoCatalog: Record<string, CryptoComponent> = {
     type: 'SmartMoneyFlow',
     description: 'Smart money flow Sankey diagram',
     dataBinding: { path: '/money_flow' },
+  },
+  TokenListTable: {
+    type: 'TokenListTable',
+    description: 'Sortable token list/ranking table with price, 24h change, market cap, and volume',
+    dataBinding: { path: '/token_list' },
+  },
+  NetWorthChart: {
+    type: 'NetWorthChart',
+    description: 'Wallet net worth area chart with trend indicator',
+    dataBinding: { path: '/net_worth_history' },
+  },
+  TopTraderTable: {
+    type: 'TopTraderTable',
+    description: 'Top traders leaderboard with PnL bar chart, buy/sell volume, and transaction count',
+    dataBinding: { path: '/top_traders' },
+  },
+  TokenStatsPanel: {
+    type: 'TokenStatsPanel',
+    description: 'Multi-period token statistics panel showing volume, transactions, makers, and price changes',
+    dataBinding: { path: '/token_stats' },
+  },
+  PoolCard: {
+    type: 'PoolCard',
+    description: 'DEX liquidity pool card showing token pair, TVL, volume, fee tier, and APR',
+    dataBinding: { path: '/pool_info' },
   },
 };

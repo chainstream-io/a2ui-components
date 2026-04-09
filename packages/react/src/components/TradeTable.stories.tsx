@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { TradeTable } from './TradeTable';
 
 const meta: Meta<typeof TradeTable> = {
-  title: 'UI/TradeTable',
+  title: 'Mock/TradeTable',
   component: TradeTable,
   parameters: { layout: 'centered' },
 };

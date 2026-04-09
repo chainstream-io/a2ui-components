@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { PnLWaterfall } from './PnLWaterfall';
 
 const meta: Meta<typeof PnLWaterfall> = {
-  title: 'Charts/PnLWaterfall',
+  title: 'Mock/PnLWaterfall',
   component: PnLWaterfall,
   parameters: { layout: 'centered' },
 };

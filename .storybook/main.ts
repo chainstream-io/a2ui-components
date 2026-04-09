@@ -20,6 +20,17 @@ const config: StorybookConfig = {
     config.resolve.alias = {
       ...config.resolve.alias,
       '@': resolve(__dirname, '../packages/react/src'),
+      '@sb': resolve(__dirname),
+    };
+
+    config.server = config.server || {};
+    config.server.proxy = {
+      ...config.server.proxy,
+      '/v2': {
+        target: 'https://api.chainstream.io',
+        changeOrigin: true,
+        secure: true,
+      },
     };
 
     return config;
