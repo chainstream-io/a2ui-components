@@ -4,10 +4,19 @@
   "description": "React renderer for A2UI Crypto Catalog components",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "style": "dist/styles.css",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./styles.css": "./dist/styles.css"
+  },
   "files": ["dist"],
+  "sideEffects": ["*.css", "**/*.css"],
   "license": "MIT",
   "scripts": {
-    "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json",
+    "build": "tsc -p tsconfig.build.json && tsc-alias -p tsconfig.build.json && cp src/globals.css dist/styles.css",
     "test": "jest"
   },
   "dependencies": {
