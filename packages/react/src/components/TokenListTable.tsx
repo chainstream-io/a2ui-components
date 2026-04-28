@@ -13,6 +13,22 @@ export interface TokenListItem {
   logoUrl?: string;
 }
 
+const TOKEN_LOGO_FIELDS = [
+  'logoUrl',
+  'logo',
+  'image',
+  'imageUrl',
+  'icon',
+  'uri',
+  'tokenLogo',
+  'currencyLogo',
+  'logo_url',
+  'logoURI',
+] as const;
+
+type TokenLogoField = (typeof TOKEN_LOGO_FIELDS)[number];
+type TokenWithLogoAliases = TokenListItem & Partial<Record<TokenLogoField, string | null | undefined>>;
+
 export interface TokenListTableProps {
   tokens: TokenListItem[];
   maxRows?: number;
@@ -41,6 +57,43 @@ function formatPrice(price: number): string {
   }
   if (price < 1) return `$${price.toPrecision(4)}`;
   return `$${price.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+}
+
+function getTokenLogoUrl(token: TokenListItem): string | undefined {
+  const tokenWithAliases = token as TokenWithLogoAliases;
+
+  for (const field of TOKEN_LOGO_FIELDS) {
+    const value = tokenWithAliases[field];
+    if (typeof value === 'string' && value.trim()) {
+      return value.trim();
+    }
+  }
+
+  return undefined;
+}
+
+function TokenLogo({ token }: { token: TokenListItem }) {
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const logoUrl = getTokenLogoUrl(token);
+  const symbol = token.symbol ?? '??';
+
+  if (!logoUrl || logoUrl === failedSrc) {
+    return (
+      <div className="flex size-6 items-center justify-center rounded-full border border-primary/25 bg-primary/12 text-[10px] font-bold text-primary">
+        {symbol.slice(0, 2)}
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={logoUrl}
+      alt={`${symbol} logo`}
+      className="size-6 rounded-full border border-border/35 bg-muted"
+      referrerPolicy="no-referrer"
+      onError={() => setFailedSrc(logoUrl)}
+    />
+  );
 }
 
 export const TokenListTable: React.FC<TokenListTableProps> = ({ tokens, maxRows = 50, className }) => {
@@ -111,13 +164,7 @@ export const TokenListTable: React.FC<TokenListTableProps> = ({ tokens, maxRows 
                 <TableCell className="text-muted-foreground tabular-nums">{i + 1}</TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
-                    {token.logoUrl ? (
-                      <img src={token.logoUrl} alt={token.symbol} className="size-6 rounded-full border border-border/70 bg-muted" />
-                    ) : (
-                      <div className="flex size-6 items-center justify-center rounded-full border border-primary/25 bg-primary/12 text-[10px] font-bold text-primary">
-                        {(token.symbol ?? '??').slice(0, 2)}
-                      </div>
-                    )}
+                    <TokenLogo token={token} />
                     <div className="flex flex-col">
                       <span className="text-sm font-medium leading-none">{token.name}</span>
                       <span className="text-xs text-muted-foreground">{token.symbol}</span>

@@ -3,14 +3,14 @@ import { cn } from '@/lib/utils';
 
 function Table({ className, ...props }: React.ComponentProps<'table'>) {
   return (
-    <div data-slot="table-wrapper" className="relative w-full min-w-0 overflow-x-auto rounded-xl border border-border/70 bg-card/60 shadow-[0_14px_48px_rgba(0,0,0,0.22)] backdrop-blur-xl">
+    <div data-slot="table-wrapper" className="relative w-full min-w-0 overflow-x-auto rounded-xl border border-border/25 bg-card/40 shadow-[0_18px_60px_rgba(0,0,0,0.16)] backdrop-blur-xl">
       <table className={cn('w-full min-w-[560px] caption-bottom text-sm', className)} {...props} />
     </div>
   );
 }
 
 function TableHeader({ className, ...props }: React.ComponentProps<'thead'>) {
-  return <thead className={cn('bg-muted/60 text-muted-foreground [&_tr]:border-b [&_tr]:border-border/70', className)} {...props} />;
+  return <thead className={cn('bg-muted/35 text-muted-foreground [&_tr]:border-b [&_tr]:border-border/25', className)} {...props} />;
 }
 
 function TableBody({ className, ...props }: React.ComponentProps<'tbody'>) {
@@ -20,7 +20,7 @@ function TableBody({ className, ...props }: React.ComponentProps<'tbody'>) {
 function TableRow({ className, ...props }: React.ComponentProps<'tr'>) {
   return (
     <tr
-      className={cn('border-b border-border/45 transition-colors hover:bg-accent/40 data-[state=selected]:bg-muted', className)}
+      className={cn('border-b border-border/20 transition-colors hover:bg-accent/25 data-[state=selected]:bg-muted/55', className)}
       {...props}
     />
   );
