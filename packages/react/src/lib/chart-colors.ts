@@ -1,22 +1,26 @@
 export const CHART_COLORS = [
-  '#6366f1', // chart-1: indigo/primary
-  '#22c55e', // chart-2: green/profit
-  '#eab308', // chart-3: yellow/warning
-  '#ef4444', // chart-4: red/loss
-  '#a855f7', // chart-5: purple
-  '#ec4899', // chart-6: pink
-  '#14b8a6', // chart-7: teal
-  '#f97316', // chart-8: orange
+  '#9b7cff', // chart-1: purple/primary
+  '#35d6ff', // chart-2: cyan/info
+  '#35d987', // chart-3: green/profit
+  '#f8bf4c', // chart-4: amber/warning
+  '#f472b6', // chart-5: pink/accent
+  '#ff6b73', // chart-6: red/loss
+  '#2dd4bf', // chart-7: teal
+  '#fb923c', // chart-8: orange
 ];
 
 export const THEME = {
-  profit: '#22c55e',
-  loss: '#ef4444',
-  info: '#6366f1',
-  warning: '#eab308',
-  background: '#0d1117',
-  foreground: '#e5e7eb',
-  muted: '#9ca3af',
-  border: '#374151',
-  gridLine: '#1f2937',
+  profit: '#35d987',
+  loss: '#ff6b73',
+  info: '#35d6ff',
+  warning: '#f8bf4c',
+  primary: '#9b7cff',
+  accent: '#f472b6',
+  background: '#111424',
+  surface: '#171b2e',
+  surfaceElevated: '#202541',
+  foreground: '#eef0fb',
+  muted: '#9aa3bf',
+  border: 'rgba(226, 232, 255, 0.16)',
+  gridLine: 'rgba(226, 232, 255, 0.08)',
 } as const;

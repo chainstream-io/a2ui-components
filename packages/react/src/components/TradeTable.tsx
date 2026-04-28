@@ -22,14 +22,14 @@ export const TradeTable: React.FC<TradeTableProps> = ({ trades, maxRows = 50, cl
 
   if (visible.length === 0) {
     return (
-      <div className={cn('flex h-32 items-center justify-center rounded-lg border border-dashed text-sm text-muted-foreground', className)} data-component="TradeTable">
+      <div className={cn('flex h-32 items-center justify-center rounded-xl border border-dashed border-border/70 bg-card/60 text-sm text-muted-foreground backdrop-blur-xl', className)} data-component="TradeTable">
         No trades yet
       </div>
     );
   }
 
   return (
-    <div className={className} data-component="TradeTable">
+    <div className={cn('w-full min-w-0', className)} data-component="TradeTable">
       <Table>
         <TableHeader>
           <TableRow className="hover:bg-transparent">
@@ -47,7 +47,7 @@ export const TradeTable: React.FC<TradeTableProps> = ({ trades, maxRows = 50, cl
                 {new Date(trade.time).toLocaleTimeString()}
               </TableCell>
               <TableCell>
-                <span className={cn('text-xs font-semibold uppercase', trade.side === 'buy' ? 'text-profit' : 'text-loss')}>
+                <span className={cn('inline-flex rounded-full border px-2 py-0.5 text-xs font-semibold uppercase', trade.side === 'buy' ? 'border-profit/30 bg-profit/12 text-profit' : 'border-loss/30 bg-loss/12 text-loss')}>
                   {trade.side}
                 </span>
               </TableCell>

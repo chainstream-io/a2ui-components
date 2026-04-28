@@ -21,8 +21,8 @@ const GROUP_BOUNDARIES = new Set(['1m', '1h', '1d']);
 export const ResolutionBar: React.FC<ResolutionBarProps> = ({ resolutions, value, onChange, className }) => {
   return (
     <div
-      className={cn('flex items-center gap-0.5 rounded-lg bg-secondary/50 p-1', className)}
-      style={{ display: 'flex', alignItems: 'center', gap: 2, borderRadius: 8, padding: 4, backgroundColor: `${THEME.border}60` }}
+      className={cn('flex items-center gap-0.5 rounded-lg border border-border/60 bg-secondary/60 p-1 backdrop-blur-md', className)}
+      style={{ display: 'flex', alignItems: 'center', gap: 2, borderRadius: 8, padding: 4, backgroundColor: THEME.surfaceElevated, border: `1px solid ${THEME.border}` }}
     >
       {resolutions.map((r, i) => {
         const isActive = r === value;
@@ -50,7 +50,7 @@ export const ResolutionBar: React.FC<ResolutionBarProps> = ({ resolutions, value
                 cursor: 'pointer',
                 border: 'none',
                 transition: 'background-color 0.15s, color 0.15s',
-                backgroundColor: isActive ? THEME.info : 'transparent',
+                backgroundColor: isActive ? THEME.primary : 'transparent',
                 color: isActive ? '#fff' : THEME.muted,
               }}
             >

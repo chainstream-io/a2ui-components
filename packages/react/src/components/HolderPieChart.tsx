@@ -47,17 +47,23 @@ export const HolderPieChart: React.FC<HolderPieChartProps> = ({ data, width = 40
   });
 
   return (
-    <svg width={width} height={height} data-component="HolderPieChart">
-      {slices.map((s, i) => (
-        <g key={i}>
-          <path d={s.path} fill={s.color} stroke={THEME.background} strokeWidth={2} />
-          {s.pct > 5 && (
-            <text x={s.lx} y={s.ly} textAnchor="middle" dominantBaseline="central" fill="#fff" fontSize={11} fontWeight={600}>
-              {s.label} {s.pct.toFixed(1)}%
-            </text>
-          )}
-        </g>
-      ))}
-    </svg>
+    <div
+      className="w-full min-w-0 overflow-hidden rounded-xl border border-border/70 bg-card/70 p-3 backdrop-blur-xl"
+      data-component="HolderPieChart"
+      style={{ maxWidth: width }}
+    >
+      <svg width="100%" height="auto" viewBox={`0 0 ${width} ${height}`} role="img" aria-label="Holder distribution pie chart">
+        {slices.map((s, i) => (
+          <g key={i}>
+            <path d={s.path} fill={s.color} stroke={THEME.background} strokeWidth={2} />
+            {s.pct > 5 && (
+              <text x={s.lx} y={s.ly} textAnchor="middle" dominantBaseline="central" fill={THEME.foreground} fontSize={11} fontWeight={600}>
+                {s.label} {s.pct.toFixed(1)}%
+              </text>
+            )}
+          </g>
+        ))}
+      </svg>
+    </div>
   );
 };

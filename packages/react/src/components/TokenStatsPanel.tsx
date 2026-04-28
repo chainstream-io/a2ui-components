@@ -34,7 +34,7 @@ function ChangeIndicator({ value }: { value: number | undefined }) {
   if (value == null) return <span className="text-muted-foreground">—</span>;
   const Icon = value > 0 ? TrendingUp : value < 0 ? TrendingDown : Minus;
   return (
-    <span className={cn('inline-flex items-center gap-0.5 text-xs font-medium tabular-nums', value > 0 ? 'text-profit' : value < 0 ? 'text-loss' : 'text-muted-foreground')}>
+    <span className={cn('inline-flex items-center gap-0.5 rounded-full border px-2 py-0.5 text-xs font-semibold tabular-nums', value > 0 ? 'border-profit/30 bg-profit/12 text-profit' : value < 0 ? 'border-loss/30 bg-loss/12 text-loss' : 'border-border/60 bg-secondary/60 text-muted-foreground')}>
       <Icon className="size-3" />
       {value > 0 ? '+' : ''}{value.toFixed(2)}%
     </span>
@@ -48,7 +48,7 @@ export const TokenStatsPanel: React.FC<TokenStatsPanelProps> = ({ periods, class
   }
   if (orderedKeys.length === 0) {
     return (
-      <div className={cn('flex h-32 items-center justify-center rounded-lg border border-dashed text-sm text-muted-foreground', className)} data-component="TokenStatsPanel">
+      <div className={cn('flex h-32 items-center justify-center rounded-xl border border-dashed border-border/70 bg-card/60 text-sm text-muted-foreground backdrop-blur-xl', className)} data-component="TokenStatsPanel">
         No stats available
       </div>
     );
@@ -57,21 +57,21 @@ export const TokenStatsPanel: React.FC<TokenStatsPanelProps> = ({ periods, class
   return (
     <Card className={cn('w-full', className)} data-component="TokenStatsPanel">
       <CardHeader className="pb-3">
-        <CardTitle className="text-sm font-semibold">Token Statistics</CardTitle>
+        <CardTitle className="text-sm font-semibold text-foreground">Token Statistics</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full min-w-[560px] text-sm">
             <thead>
-              <tr className="border-b border-border">
-                <th className="pb-2 text-left text-xs font-medium text-muted-foreground">Metric</th>
+              <tr className="border-b border-border/70">
+                <th className="pb-2 text-left text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">Metric</th>
                 {orderedKeys.map((k) => (
-                  <th key={k} className="pb-2 text-right text-xs font-medium text-muted-foreground">{k}</th>
+                  <th key={k} className="pb-2 text-right text-xs font-semibold uppercase tracking-[0.08em] text-muted-foreground">{k}</th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-border/50">
-              <tr>
+              <tr className="transition-colors hover:bg-accent/25">
                 <td className="py-2 text-muted-foreground">Volume</td>
                 {orderedKeys.map((k) => (
                   <td key={k} className="py-2 text-right tabular-nums">
@@ -79,7 +79,7 @@ export const TokenStatsPanel: React.FC<TokenStatsPanelProps> = ({ periods, class
                   </td>
                 ))}
               </tr>
-              <tr>
+              <tr className="transition-colors hover:bg-accent/25">
                 <td className="py-2 text-muted-foreground">Vol Change</td>
                 {orderedKeys.map((k) => (
                   <td key={k} className="py-2 text-right">
@@ -87,7 +87,7 @@ export const TokenStatsPanel: React.FC<TokenStatsPanelProps> = ({ periods, class
                   </td>
                 ))}
               </tr>
-              <tr>
+              <tr className="transition-colors hover:bg-accent/25">
                 <td className="py-2 text-muted-foreground">Transactions</td>
                 {orderedKeys.map((k) => (
                   <td key={k} className="py-2 text-right tabular-nums">
@@ -95,7 +95,7 @@ export const TokenStatsPanel: React.FC<TokenStatsPanelProps> = ({ periods, class
                   </td>
                 ))}
               </tr>
-              <tr>
+              <tr className="transition-colors hover:bg-accent/25">
                 <td className="py-2 text-muted-foreground">Buy / Sell</td>
                 {orderedKeys.map((k) => {
                   const p = periods[k];
@@ -114,7 +114,7 @@ export const TokenStatsPanel: React.FC<TokenStatsPanelProps> = ({ periods, class
                   );
                 })}
               </tr>
-              <tr>
+              <tr className="transition-colors hover:bg-accent/25">
                 <td className="py-2 text-muted-foreground">Price Change</td>
                 {orderedKeys.map((k) => (
                   <td key={k} className="py-2 text-right">

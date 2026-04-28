@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import { createChart, ColorType, type IChartApi, type ISeriesApi } from 'lightweight-charts';
 import { THEME } from '@/lib/chart-colors';
+import { useResponsiveChartWidth } from '@/lib/use-responsive-chart-width';
 
 export interface PriceLineChartProps {
   data: Array<{ time: number; value: number }>;
@@ -15,9 +16,11 @@ export const PriceLineChart: React.FC<PriceLineChartProps> = ({
   height = 400,
   color = THEME.info,
 }) => {
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const seriesRef = useRef<ISeriesApi<'Line'> | null>(null);
+  const chartWidth = useResponsiveChartWidth(wrapperRef, width);
 
   const initChart = useCallback(() => {
     if (!containerRef.current) return;
@@ -28,10 +31,10 @@ export const PriceLineChart: React.FC<PriceLineChartProps> = ({
     }
 
     const chart = createChart(containerRef.current, {
-      width,
+      width: chartWidth,
       height,
       layout: {
-        background: { type: ColorType.Solid, color: THEME.background },
+        background: { type: ColorType.Solid, color: 'transparent' },
         textColor: THEME.foreground,
       },
       grid: {
@@ -39,7 +42,8 @@ export const PriceLineChart: React.FC<PriceLineChartProps> = ({
         horzLines: { color: THEME.gridLine },
       },
       crosshair: { mode: 0 },
-      timeScale: { timeVisible: true, secondsVisible: false },
+      rightPriceScale: { borderColor: THEME.border },
+      timeScale: { timeVisible: true, secondsVisible: false, borderColor: THEME.border },
     });
 
     const series = chart.addLineSeries({
@@ -51,7 +55,7 @@ export const PriceLineChart: React.FC<PriceLineChartProps> = ({
 
     chartRef.current = chart;
     seriesRef.current = series;
-  }, [width, height, color]);
+  }, [chartWidth, height, color]);
 
   useEffect(() => {
     initChart();
@@ -72,9 +76,18 @@ export const PriceLineChart: React.FC<PriceLineChartProps> = ({
 
   useEffect(() => {
     if (chartRef.current) {
-      chartRef.current.applyOptions({ width, height });
+      chartRef.current.applyOptions({ width: chartWidth, height });
     }
-  }, [width, height]);
+  }, [chartWidth, height]);
 
-  return <div ref={containerRef} data-component="PriceLineChart" />;
+  return (
+    <div
+      ref={wrapperRef}
+      className="w-full min-w-0 overflow-hidden rounded-xl border border-border/70 bg-card/70 p-2 backdrop-blur-xl"
+      data-component="PriceLineChart"
+      style={{ maxWidth: width }}
+    >
+      <div ref={containerRef} className="w-full min-w-0" />
+    </div>
+  );
 };

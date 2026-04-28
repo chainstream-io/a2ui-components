@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import { createChart, ColorType, type IChartApi, type ISeriesApi } from 'lightweight-charts';
 import { THEME } from '@/lib/chart-colors';
+import { useResponsiveChartWidth } from '@/lib/use-responsive-chart-width';
 
 export interface VolumeBarChartProps {
   data: Array<{ time: number; volume: number; color?: string }>;
@@ -9,9 +10,11 @@ export interface VolumeBarChartProps {
 }
 
 export const VolumeBarChart: React.FC<VolumeBarChartProps> = ({ data, width = 600, height = 300 }) => {
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const seriesRef = useRef<ISeriesApi<'Histogram'> | null>(null);
+  const chartWidth = useResponsiveChartWidth(wrapperRef, width);
 
   const initChart = useCallback(() => {
     if (!containerRef.current) return;
@@ -22,17 +25,18 @@ export const VolumeBarChart: React.FC<VolumeBarChartProps> = ({ data, width = 60
     }
 
     const chart = createChart(containerRef.current, {
-      width,
+      width: chartWidth,
       height,
       layout: {
-        background: { type: ColorType.Solid, color: THEME.background },
+        background: { type: ColorType.Solid, color: 'transparent' },
         textColor: THEME.foreground,
       },
       grid: {
         vertLines: { color: THEME.gridLine },
         horzLines: { color: THEME.gridLine },
       },
-      timeScale: { timeVisible: true, secondsVisible: false },
+      rightPriceScale: { borderColor: THEME.border },
+      timeScale: { timeVisible: true, secondsVisible: false, borderColor: THEME.border },
     });
 
     const series = chart.addHistogramSeries({
@@ -42,7 +46,7 @@ export const VolumeBarChart: React.FC<VolumeBarChartProps> = ({ data, width = 60
 
     chartRef.current = chart;
     seriesRef.current = series;
-  }, [width, height]);
+  }, [chartWidth, height]);
 
   useEffect(() => {
     initChart();
@@ -69,9 +73,18 @@ export const VolumeBarChart: React.FC<VolumeBarChartProps> = ({ data, width = 60
 
   useEffect(() => {
     if (chartRef.current) {
-      chartRef.current.applyOptions({ width, height });
+      chartRef.current.applyOptions({ width: chartWidth, height });
     }
-  }, [width, height]);
+  }, [chartWidth, height]);
 
-  return <div ref={containerRef} data-component="VolumeBarChart" />;
+  return (
+    <div
+      ref={wrapperRef}
+      className="w-full min-w-0 overflow-hidden rounded-xl border border-border/70 bg-card/70 p-2 backdrop-blur-xl"
+      data-component="VolumeBarChart"
+      style={{ maxWidth: width }}
+    >
+      <div ref={containerRef} className="w-full min-w-0" />
+    </div>
+  );
 };

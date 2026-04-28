@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import { createChart, ColorType, type IChartApi, type ISeriesApi } from 'lightweight-charts';
 import { THEME } from '@/lib/chart-colors';
+import { cn } from '@/lib/utils';
+import { useResponsiveChartWidth } from '@/lib/use-responsive-chart-width';
 
 export interface NetWorthDataPoint {
   time: number;
@@ -20,9 +22,11 @@ export const NetWorthChart: React.FC<NetWorthChartProps> = ({
   height = 300,
   className,
 }) => {
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const seriesRef = useRef<ISeriesApi<'Area'> | null>(null);
+  const chartWidth = useResponsiveChartWidth(wrapperRef, width);
 
   const isPositiveTrend = data.length >= 2 && data[data.length - 1].value >= data[0].value;
   const lineColor = isPositiveTrend ? THEME.profit : THEME.loss;
@@ -36,7 +40,7 @@ export const NetWorthChart: React.FC<NetWorthChartProps> = ({
     }
 
     const chart = createChart(containerRef.current, {
-      width,
+      width: chartWidth,
       height,
       layout: {
         background: { type: ColorType.Solid, color: 'transparent' },
@@ -72,7 +76,7 @@ export const NetWorthChart: React.FC<NetWorthChartProps> = ({
 
     chartRef.current = chart;
     seriesRef.current = series;
-  }, [width, height, lineColor]);
+  }, [chartWidth, height, lineColor]);
 
   useEffect(() => {
     initChart();
@@ -95,15 +99,15 @@ export const NetWorthChart: React.FC<NetWorthChartProps> = ({
 
   useEffect(() => {
     if (chartRef.current) {
-      chartRef.current.applyOptions({ width, height });
+      chartRef.current.applyOptions({ width: chartWidth, height });
     }
-  }, [width, height]);
+  }, [chartWidth, height]);
 
   if (data.length === 0) {
     return (
       <div
-        className="flex items-center justify-center text-sm text-muted-foreground"
-        style={{ width, height }}
+        className={cn('flex w-full min-w-0 items-center justify-center rounded-xl border border-dashed border-border/70 bg-card/60 text-sm text-muted-foreground backdrop-blur-xl', className)}
+        style={{ maxWidth: width, height }}
       >
         No net worth data
       </div>
@@ -115,18 +119,23 @@ export const NetWorthChart: React.FC<NetWorthChartProps> = ({
   const change = earliest > 0 ? ((latest - earliest) / earliest) * 100 : 0;
 
   return (
-    <div className={className} data-component="NetWorthChart">
+    <div
+      ref={wrapperRef}
+      className={cn('w-full min-w-0 overflow-hidden rounded-xl border border-border/70 bg-card/70 p-3 backdrop-blur-xl', className)}
+      data-component="NetWorthChart"
+      style={{ maxWidth: width }}
+    >
       <div className="mb-2 flex items-baseline gap-3 px-1">
         <span className="text-lg font-bold tabular-nums text-foreground">
           ${latest.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
         </span>
         {change !== 0 && (
-          <span className={`text-sm font-medium tabular-nums ${isPositiveTrend ? 'text-profit' : 'text-loss'}`}>
+          <span className={`rounded-full border px-2 py-0.5 text-sm font-semibold tabular-nums ${isPositiveTrend ? 'border-profit/30 bg-profit/12 text-profit' : 'border-loss/30 bg-loss/12 text-loss'}`}>
             {change >= 0 ? '+' : ''}{change.toFixed(2)}%
           </span>
         )}
       </div>
-      <div ref={containerRef} />
+      <div ref={containerRef} className="w-full min-w-0" />
     </div>
   );
 };

@@ -28,11 +28,11 @@ export const AlertBadge: React.FC<AlertBadgeProps> = ({ type, message, timestamp
   const Icon = iconMap[type];
 
   return (
-    <Badge variant={variantMap[type]} className={cn('gap-1.5 px-3 py-1 text-xs', className)} data-component="AlertBadge">
+    <Badge variant={variantMap[type]} className={cn('gap-1.5 px-3 py-1 text-xs shadow-none', className)} data-component="AlertBadge">
       <Icon className="size-3.5" />
       <span>{message}</span>
       {timestamp != null && (
-        <span className="opacity-60">{new Date(timestamp).toLocaleTimeString()}</span>
+        <span className="border-l border-current/20 pl-1.5 opacity-65">{new Date(timestamp).toLocaleTimeString()}</span>
       )}
     </Badge>
   );

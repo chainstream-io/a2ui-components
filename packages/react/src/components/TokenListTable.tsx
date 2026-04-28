@@ -68,7 +68,7 @@ export const TokenListTable: React.FC<TokenListTableProps> = ({ tokens, maxRows 
 
   if (sorted.length === 0) {
     return (
-      <div className={cn('flex h-32 items-center justify-center rounded-lg border border-dashed text-sm text-muted-foreground', className)} data-component="TokenListTable">
+      <div className={cn('flex h-32 items-center justify-center rounded-xl border border-dashed border-border/70 bg-card/60 text-sm text-muted-foreground backdrop-blur-xl', className)} data-component="TokenListTable">
         No tokens found
       </div>
     );
@@ -80,7 +80,7 @@ export const TokenListTable: React.FC<TokenListTableProps> = ({ tokens, maxRows 
   const SortHeader = ({ label, field }: { label: string; field: SortKey }) => (
     <button
       type="button"
-      className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
+      className="inline-flex items-center gap-1 rounded-md px-1 py-0.5 transition-colors hover:bg-accent/45 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/70"
       onClick={() => handleSort(field)}
     >
       {label}
@@ -89,7 +89,7 @@ export const TokenListTable: React.FC<TokenListTableProps> = ({ tokens, maxRows 
   );
 
   return (
-    <div className={className} data-component="TokenListTable">
+    <div className={cn('w-full min-w-0', className)} data-component="TokenListTable">
       <Table>
         <TableHeader>
           <TableRow className="hover:bg-transparent">
@@ -112,9 +112,9 @@ export const TokenListTable: React.FC<TokenListTableProps> = ({ tokens, maxRows 
                 <TableCell>
                   <div className="flex items-center gap-2">
                     {token.logoUrl ? (
-                      <img src={token.logoUrl} alt={token.symbol} className="size-6 rounded-full bg-muted" />
+                      <img src={token.logoUrl} alt={token.symbol} className="size-6 rounded-full border border-border/70 bg-muted" />
                     ) : (
-                      <div className="flex size-6 items-center justify-center rounded-full bg-muted text-[10px] font-bold text-muted-foreground">
+                      <div className="flex size-6 items-center justify-center rounded-full border border-primary/25 bg-primary/12 text-[10px] font-bold text-primary">
                         {(token.symbol ?? '??').slice(0, 2)}
                       </div>
                     )}
@@ -126,7 +126,7 @@ export const TokenListTable: React.FC<TokenListTableProps> = ({ tokens, maxRows 
                 </TableCell>
                 <TableCell className="text-right tabular-nums font-medium">{formatPrice(price)}</TableCell>
                 <TableCell className="text-right">
-                  <span className={cn('inline-flex items-center gap-1 text-xs font-medium tabular-nums', isPositive ? 'text-profit' : 'text-loss')}>
+                  <span className={cn('inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-semibold tabular-nums', isPositive ? 'border-profit/30 bg-profit/12 text-profit' : 'border-loss/30 bg-loss/12 text-loss')}>
                     {isPositive ? <TrendingUp className="size-3" /> : <TrendingDown className="size-3" />}
                     {isPositive ? '+' : ''}{change.toFixed(2)}%
                   </span>

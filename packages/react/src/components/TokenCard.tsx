@@ -42,30 +42,32 @@ export const TokenCard: React.FC<TokenCardProps> = ({ name, symbol, price = 0, c
   const isPositive = safeChange >= 0;
 
   return (
-    <Card className={cn('w-[280px] transition-colors hover:border-primary/30', className)} data-component="TokenCard">
+    <Card className={cn('w-full max-w-[280px] overflow-hidden transition-colors hover:border-primary/35 hover:bg-card', className)} data-component="TokenCard">
       <CardHeader className="flex-row items-center gap-3 space-y-0">
         {logoUrl ? (
-          <img src={logoUrl} alt={symbol} className="size-10 rounded-full bg-muted" />
+          <img src={logoUrl} alt={symbol} className="size-10 rounded-full border border-border/70 bg-muted shadow-sm" />
         ) : (
-          <div className="flex size-10 items-center justify-center rounded-full bg-muted text-sm font-bold text-muted-foreground">
+          <div className="flex size-10 items-center justify-center rounded-full border border-primary/25 bg-primary/12 text-sm font-bold text-primary">
             {(symbol ?? '??').slice(0, 2)}
           </div>
         )}
-        <div className="flex flex-col">
+        <div className="flex min-w-0 flex-col">
           <span className="font-semibold leading-none">{name}</span>
-          <span className="text-sm text-muted-foreground">{symbol}</span>
+          <span className="mt-1 w-fit rounded-full border border-border/60 bg-secondary/60 px-2 py-0.5 text-xs font-medium text-muted-foreground">
+            {symbol}
+          </span>
         </div>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
         <div className="flex items-baseline justify-between">
           <span className="text-2xl font-bold tabular-nums tracking-tight">{formatPrice(price || 0)}</span>
-          <span className={cn('inline-flex items-center gap-1 text-sm font-medium tabular-nums', isPositive ? 'text-profit' : 'text-loss')}>
+          <span className={cn('inline-flex items-center gap-1 rounded-full border px-2 py-1 text-xs font-semibold tabular-nums', isPositive ? 'border-profit/30 bg-profit/12 text-profit' : 'border-loss/30 bg-loss/12 text-loss')}>
             {isPositive ? <TrendingUp className="size-3.5" /> : <TrendingDown className="size-3.5" />}
             {isPositive ? '+' : ''}{safeChange.toFixed(2)}%
           </span>
         </div>
         {marketCap != null && marketCap > 0 && (
-          <div className="flex items-center justify-between text-sm text-muted-foreground">
+          <div className="mt-1 flex items-center justify-between rounded-lg border border-border/50 bg-muted/35 px-3 py-2 text-sm text-muted-foreground">
             <span>Market Cap</span>
             <span className="font-medium tabular-nums text-foreground">{formatCompact(marketCap)}</span>
           </div>

@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { createChart, ColorType, CrosshairMode, type IChartApi, type ISeriesApi, type CandlestickData, type HistogramData, type Time } from 'lightweight-charts';
 import { THEME } from '@/lib/chart-colors';
 import { cn } from '@/lib/utils';
+import { useResponsiveChartWidth } from '@/lib/use-responsive-chart-width';
 import { ResolutionBar } from './kline/ResolutionBar';
 import { CrosshairInfo, type CrosshairData } from './kline/CrosshairInfo';
 import type { KlineBar } from '@/hooks/useKlineData';
@@ -47,6 +48,7 @@ export const KlineChart: React.FC<KlineChartProps> = ({
   autoScroll = true,
   className,
 }) => {
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
   const candleSeriesRef = useRef<ISeriesApi<'Candlestick'> | null>(null);
@@ -54,6 +56,7 @@ export const KlineChart: React.FC<KlineChartProps> = ({
   const [resolution, setResolution] = useState(initialResolution);
   const [crosshairData, setCrosshairData] = useState<CrosshairData | null>(null);
   const dataMapRef = useRef<Map<number, KlineBar>>(new Map());
+  const chartWidth = useResponsiveChartWidth(wrapperRef, width);
 
   const toolbarHeight = showToolbar ? 36 : 0;
   const infoHeight = showCrosshairInfo ? 24 : 0;
@@ -64,10 +67,10 @@ export const KlineChart: React.FC<KlineChartProps> = ({
     if (!containerRef.current) return;
 
     const chart = createChart(containerRef.current, {
-      width,
+      width: chartWidth,
       height: chartHeight,
       layout: {
-        background: { type: ColorType.Solid, color: THEME.background },
+        background: { type: ColorType.Solid, color: 'transparent' },
         textColor: THEME.foreground,
         fontFamily: "'Inter', -apple-system, system-ui, sans-serif",
       },
@@ -171,7 +174,7 @@ export const KlineChart: React.FC<KlineChartProps> = ({
       candleSeriesRef.current = null;
       volumeSeriesRef.current = null;
     };
-  }, [width, chartHeight, showVolume]);
+  }, [chartWidth, chartHeight, showVolume]);
 
   // Scroll-to-load-more: detect left edge
   const loadMoreRef = useRef(onLoadMore);
@@ -240,8 +243,8 @@ export const KlineChart: React.FC<KlineChartProps> = ({
 
   // Resize
   useEffect(() => {
-    chartRef.current?.applyOptions({ width, height: chartHeight });
-  }, [width, chartHeight]);
+    chartRef.current?.applyOptions({ width: chartWidth, height: chartHeight });
+  }, [chartWidth, chartHeight]);
 
   const handleResolutionChange = useCallback((r: string) => {
     setResolution(r);
@@ -250,12 +253,13 @@ export const KlineChart: React.FC<KlineChartProps> = ({
 
   return (
     <div
-      className={cn('flex flex-col', className)}
+      ref={wrapperRef}
+      className={cn('flex w-full min-w-0 flex-col overflow-hidden rounded-xl border border-border/70 bg-card/70 p-2 shadow-[0_18px_60px_rgba(0,0,0,0.24)] backdrop-blur-xl', className)}
       data-component="KlineChart"
-      style={{ width, backgroundColor: THEME.background, color: THEME.foreground }}
+      style={{ maxWidth: width, color: THEME.foreground }}
     >
       {showToolbar && (
-        <div style={{ display: 'flex', alignItems: 'center', padding: '4px 4px 6px' }}>
+        <div className="min-w-0 overflow-x-auto" style={{ display: 'flex', alignItems: 'center', padding: '4px 4px 6px' }}>
           <ResolutionBar
             resolutions={resolutions}
             value={resolution}
@@ -264,11 +268,11 @@ export const KlineChart: React.FC<KlineChartProps> = ({
         </div>
       )}
       {showCrosshairInfo && (
-        <div style={{ height: 24, padding: '0 4px 2px' }}>
+        <div className="min-w-0 overflow-hidden" style={{ minHeight: 24, padding: '0 4px 2px' }}>
           <CrosshairInfo data={crosshairData} />
         </div>
       )}
-      <div ref={containerRef} />
+      <div ref={containerRef} className="w-full min-w-0" />
     </div>
   );
 };
