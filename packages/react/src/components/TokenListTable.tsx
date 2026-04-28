@@ -79,7 +79,7 @@ function TokenLogo({ token }: { token: TokenListItem }) {
 
   if (!logoUrl || logoUrl === failedSrc) {
     return (
-      <div className="flex size-6 items-center justify-center rounded-full border border-primary/25 bg-primary/12 text-[10px] font-bold text-primary">
+      <div className="flex size-6 items-center justify-center rounded-full border border-white/[0.08] bg-white/[0.04] text-[10px] font-semibold text-primary/[0.75]">
         {symbol.slice(0, 2)}
       </div>
     );
@@ -89,7 +89,7 @@ function TokenLogo({ token }: { token: TokenListItem }) {
     <img
       src={logoUrl}
       alt={`${symbol} logo`}
-      className="size-6 rounded-full border border-border/35 bg-muted"
+      className="size-6 rounded-full border border-white/[0.08] bg-muted/45"
       referrerPolicy="no-referrer"
       onError={() => setFailedSrc(logoUrl)}
     />
@@ -133,11 +133,11 @@ export const TokenListTable: React.FC<TokenListTableProps> = ({ tokens, maxRows 
   const SortHeader = ({ label, field }: { label: string; field: SortKey }) => (
     <button
       type="button"
-      className="inline-flex items-center gap-1 rounded-md px-1 py-0.5 transition-colors hover:bg-accent/45 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/70"
+      className="inline-flex items-center gap-1 rounded-md px-1 py-0.5 transition-colors hover:bg-white/[0.035] hover:text-foreground/[0.85] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/[0.55]"
       onClick={() => handleSort(field)}
     >
       {label}
-      <ArrowUpDown className={cn('size-3', sortKey === field ? 'text-primary' : 'text-muted-foreground/50')} />
+      <ArrowUpDown className={cn('size-3', sortKey === field ? 'text-muted-foreground/[0.85]' : 'text-muted-foreground/[0.45]')} />
     </button>
   );
 
@@ -161,30 +161,30 @@ export const TokenListTable: React.FC<TokenListTableProps> = ({ tokens, maxRows 
             const isPositive = change >= 0;
             return (
               <TableRow key={`${token.symbol}-${i}`}>
-                <TableCell className="text-muted-foreground tabular-nums">{i + 1}</TableCell>
+                <TableCell className="text-muted-foreground/[0.7] tabular-nums">{i + 1}</TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <TokenLogo token={token} />
                     <div className="flex flex-col">
-                      <span className="text-sm font-medium leading-none">{token.name}</span>
-                      <span className="text-xs text-muted-foreground">{token.symbol}</span>
+                      <span className="text-sm font-medium leading-snug text-foreground/[0.9]">{token.name}</span>
+                      <span className="text-xs leading-snug text-muted-foreground/[0.65]">{token.symbol}</span>
                     </div>
                   </div>
                 </TableCell>
-                <TableCell className="text-right tabular-nums font-medium">{formatPrice(price)}</TableCell>
+                <TableCell className="text-right tabular-nums font-semibold leading-relaxed text-foreground/[0.9]">{formatPrice(price)}</TableCell>
                 <TableCell className="text-right">
-                  <span className={cn('inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-semibold tabular-nums', isPositive ? 'border-profit/30 bg-profit/12 text-profit' : 'border-loss/30 bg-loss/12 text-loss')}>
+                  <span className={cn('inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-xs font-medium tabular-nums', isPositive ? 'border-profit/[0.2] bg-profit/[0.08] text-profit/[0.9]' : 'border-loss/[0.2] bg-loss/[0.08] text-loss/[0.9]')}>
                     {isPositive ? <TrendingUp className="size-3" /> : <TrendingDown className="size-3" />}
                     {isPositive ? '+' : ''}{change.toFixed(2)}%
                   </span>
                 </TableCell>
                 {hasMarketCap && (
-                  <TableCell className="text-right tabular-nums text-sm">
+                  <TableCell className="text-right text-sm font-medium tabular-nums leading-relaxed text-foreground/[0.8]">
                     {token.marketCap ? formatCompact(token.marketCap) : '—'}
                   </TableCell>
                 )}
                 {hasVolume && (
-                  <TableCell className="text-right tabular-nums text-sm">
+                  <TableCell className="text-right text-sm font-medium tabular-nums leading-relaxed text-foreground/[0.8]">
                     {token.volume24h ? formatCompact(token.volume24h) : '—'}
                   </TableCell>
                 )}
